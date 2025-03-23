@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=77.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "odmantic-fernet-field-type"
+version = "0.0.1"
+description = "A field type that encrypts values using Fernet symmetric encryption."
+readme = "README.md"
+authors = [{ name = "Arnab Jain", email = "arnab@inocentum.in" }]
+license = { text = "MIT" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "odmantic>=1.0.2",
+    "python-dotenv>=1.0.1",
+    "cryptography>=44.0.2"
+]
+requires-python = ">=3.10"
+
+[project.urls]
+Homepage = "https://github.com/arnabJ/ODMantic-Fernet-Field-Type"
+"Bug Tracker" = "https://github.com/arnabJ/ODMantic-Fernet-Field-Type/issues"
+
+[project.scripts]
+fernet-key = "odmantic_custom_fields.utils:print_key_instructions"
