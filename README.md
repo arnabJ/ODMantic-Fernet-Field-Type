@@ -80,7 +80,7 @@ admin.mount_to(app)
 
 ## Compatibility
 
-- Python 3.8+
+- Python 3.9+
 - ODMantic 1.0.2+
 - MongoDB 6.0+
 - Tested with MongoDB 8.0.5
