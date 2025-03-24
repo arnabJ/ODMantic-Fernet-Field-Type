@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "odmantic-fernet-field-type"
-version = "0.0.1"
+version = "0.0.2"
 description = "A field type that encrypts values using Fernet symmetric encryption."
 readme = "README.md"
 authors = [{ name = "Arnab Jain", email = "arnab@inocentum.in" }]
@@ -40,4 +40,4 @@ Changelog = "https://github.com/arnabJ/ODMantic-Fernet-Field-Type/releases"
 Documentation = "https://github.com/arnabJ/ODMantic-Fernet-Field-Type/blob/main/README.md"
 
 [project.scripts]
-fernet-key = "odmantic_custom_fields.utils:print_key_instructions"
+fernet-key = "odmantic_fernet_field.utils:print_key_instructions"

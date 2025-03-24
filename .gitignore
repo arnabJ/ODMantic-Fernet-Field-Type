@@ -148,3 +148,6 @@ logs
 
 # Package specific
 odmantic_fernet_field_type.egg-info/
+
+# Mac OS
+**/.DS_Store
