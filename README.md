@@ -1,12 +1,19 @@
 # ODMantic Fernet Field Type
 
-A specialized encrypted string field type for ODMantic that provides transparent encryption/decryption of string data in MongoDB.
+[![Publish Python Package](https://github.com/arnabJ/ODMantic-Fernet-Field-Type/actions/workflows/publish.yml/badge.svg)](https://github.com/arnabJ/ODMantic-Fernet-Field-Type/actions/workflows/publish.yml)
+![python-3.8-3.9-3.10-3.11-3.12-3.13](https://img.shields.io/badge/python-3.8%20|%203.9%20|%203.10%20|%203.11%20|%203.12%20|%203.13-informational.svg)
+[![Package version](https://img.shields.io/pypi/v/odmantic-fernet-field-type?color=%2334D058&label=pypi)](https://pypi.org/project/odmantic-fernet-field-type)
+
+---
+
+A field type that encrypts values using Fernet symmetric encryption.
 
 ## Features
 
 - `EncryptedString`: A custom field type that transparently encrypts data before storing it in MongoDB and decrypts it when retrieved
 - Simple integration with ODMantic models
 - Compatible with FastAPI and starlette-admin
+- Keys rotation is possible by providing multiple comma separated keys in the env variable.
 
 ## Installation
 
@@ -16,7 +23,7 @@ pip install odmantic-fernet-field-type
 
 ## Quick Start
 
-### 1. Setup your encryption key
+### 1. Set up your encryption key
 
 This package requires a Fernet encryption key stored in the `FERNET_KEY` environment variable. You can generate a suitable key by running:
 
@@ -29,8 +36,25 @@ This will output a generated key along with instructions for setting up your env
 
 ### 2. Basic Usage
 
+#### Single Key
+```dotenv
+# .env
+...
+
+FERNET_Key="hMnbZbtP5xV52ZCZqmRbNtPwpVi5ZwAMRbHe2bRBezU="
+```
+
+#### Multiple Keys (For rotation)
+```dotenv
+# .env
+...
+
+FERNET_Key="hMnbZbtP5xV52ZCZqmRbNtPwpVi5ZwAMRbHe2bRBezU=,Zbv88ZR8nQeQt7nqts43GqoIMv5KFPgKeVFAK2aa2VY="
+```
+
 ```python
-from odmantic import Model, Field
+from odmantic import Model
+# Note: The import package is "odmantic_fernet_field" and not "odmantic_fernet_field_type"
 from odmantic_fernet_field import EncryptedString
 
 class User(Model):
@@ -74,8 +98,8 @@ admin.mount_to(app)
 ## Security Considerations
 
 - Never hardcode encryption keys in your source code
-- Use environment variables or a secure key management solution
-- Rotate your encryption keys periodically [**Coming Soon**]
+- Use environment variables
+- Rotate your encryption keys periodically [**NEW**]
 - Back up your encryption keys - if lost, encrypted data cannot be recovered
 
 ## Compatibility
