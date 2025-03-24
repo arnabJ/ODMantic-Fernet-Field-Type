@@ -8,7 +8,6 @@
 ### Fixed
 - Fernet key generation command (`fernet-key`) gives `ModuleNotFoundError`.
 ---
-
 ## 0.0.1 (2025-03-23)
 
 ### Added
