@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.0.3 (2025-03-28)
+
+### Added
+- EncryptedInt Data type
+- EncryptedFloat Data type
+- EncryptedJSON Data type
+- Docstrings for all the 4 Field Types
+
+### Updated
+- README.md: Added example of the newly added field types
+
+### Cleaned
+- Removed unused code from BaseEncryptedString class
+---
 ## 0.0.2 (2025-03-24)
 
 ### Added
@@ -8,7 +22,6 @@
 ### Fixed
 - Fernet key generation command (`fernet-key`) gives `ModuleNotFoundError`.
 ---
-
 ## 0.0.1 (2025-03-23)
 
 ### Added
