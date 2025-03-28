@@ -3,6 +3,7 @@
 [![Publish Python Package](https://github.com/arnabJ/ODMantic-Fernet-Field-Type/actions/workflows/publish.yml/badge.svg)](https://github.com/arnabJ/ODMantic-Fernet-Field-Type/actions/workflows/publish.yml)
 ![python-3.8-3.9-3.10-3.11-3.12-3.13](https://img.shields.io/badge/python-3.8%20|%203.9%20|%203.10%20|%203.11%20|%203.12%20|%203.13-informational.svg)
 [![Package version](https://img.shields.io/pypi/v/odmantic-fernet-field-type?color=%2334D058&label=pypi)](https://pypi.org/project/odmantic-fernet-field-type)
+[![PyPI Downloads](https://static.pepy.tech/badge/odmantic-fernet-field-type)](https://pepy.tech/projects/odmantic-fernet-field-type)
 
 ---
 
@@ -11,6 +12,9 @@ A field type that encrypts values using Fernet symmetric encryption.
 ## Features
 
 - `EncryptedString`: A custom field type that transparently encrypts data before storing it in MongoDB and decrypts it when retrieved
+- `EncryptedInt`: A custom field type to encrypt Integer values.
+- `EncryptedFloat`: A custom field type to encrypt Floats values.
+- `EncryptedJSON`: A custom field type to encrypt JSONs.
 - Simple integration with ODMantic models
 - Compatible with FastAPI and starlette-admin
 - Keys rotation is possible by providing multiple comma separated keys in the env variable.
@@ -41,7 +45,7 @@ This will output a generated key along with instructions for setting up your env
 # .env
 ...
 
-FERNET_Key="hMnbZbtP5xV52ZCZqmRbNtPwpVi5ZwAMRbHe2bRBezU="
+FERNET_KEY="xxxxxxxyyyyyyyyzzzzzzzzzzz="
 ```
 
 #### Multiple Keys (For rotation)
@@ -49,13 +53,13 @@ FERNET_Key="hMnbZbtP5xV52ZCZqmRbNtPwpVi5ZwAMRbHe2bRBezU="
 # .env
 ...
 
-FERNET_Key="hMnbZbtP5xV52ZCZqmRbNtPwpVi5ZwAMRbHe2bRBezU=,Zbv88ZR8nQeQt7nqts43GqoIMv5KFPgKeVFAK2aa2VY="
+FERNET_KEY="pppppppqqqqqqqrrrrrrrrrr=,xxxxxxxyyyyyyyyzzzzzzzzzzz="
 ```
 
 ```python
 from odmantic import Model
 # Note: The import package is "odmantic_fernet_field" and not "odmantic_fernet_field_type"
-from odmantic_fernet_field import EncryptedString
+from odmantic_fernet_field import EncryptedString, EncryptedInt, EncryptedFloat, EncryptedJSON
 
 class User(Model):
     name: str
@@ -63,11 +67,22 @@ class User(Model):
     password_hash: str
     # This field will be automatically encrypted in the database
     secret_answer: EncryptedString
+    account_no: EncryptedInt
+    account_balance: EncryptedFloat
+    bank_details: EncryptedJSON
 
 ...
 
-# Create and save a user - the secret_answer will be encrypted in MongoDB
-user = User(name="John", email="john@example.com", password_hash="...", secret_answer="April 1st, 2025")
+# Create and save a user - the secret_answer, account_no, account_balance & bank_details will be encrypted in MongoDB
+user = User(
+    name="John", email="john@example.com", password_hash="...", secret_answer="April 1st, 2025", account_no=1234567890, 
+    account_balance=1000000.00, bank_details={
+        "accountHolder": "John Doe",
+        "accountNumber": 1234567890,
+        "type": "Checking",
+        "isActive": True
+    }
+)
 
 # When you retrieve the user, the secret_answer is automatically decrypted
 retrieved_user = await engine.find_one(User, User.email == "john@example.com")
