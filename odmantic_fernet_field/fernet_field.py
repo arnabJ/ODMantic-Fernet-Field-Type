@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from typing import Annotated, Any
 
 from cryptography.fernet import Fernet, InvalidToken
@@ -121,6 +122,23 @@ class BaseEncryptedFloat(float):
         return v
 
 
+class CustomEncoder(json.JSONEncoder):
+    def default(self, obj: Any) -> Any:
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+        return super().default(obj)
+
+
+def custom_parser(dct: dict) -> dict:
+    for key, value in dct.items():
+        if isinstance(value, str):
+            try:
+                dct[key] = datetime.fromisoformat(value)
+            except ValueError:
+                pass
+    return dct
+
+
 class BaseEncryptedJSON(dict):
     """
         A field type that encrypts dict/json values using Fernet symmetric encryption.
@@ -148,7 +166,7 @@ class BaseEncryptedJSON(dict):
             for key in fernet_keys:
                 f = Fernet(key.strip().encode())
                 try:
-                    decrypted_value = json.loads(f.decrypt(v).decode())
+                    decrypted_value = json.loads(f.decrypt(v).decode(), object_hook=custom_parser)
                     break
                 except InvalidToken:
                     pass
@@ -179,7 +197,7 @@ def encrypt(value: str | int | float | dict) -> bytes:
     elif type(value) in [int, float]:
         v = str(value)
     elif type(value) is dict:
-        v = json.dumps(value)
+        v = json.dumps(value, cls=CustomEncoder)
     else:
         raise TypeError("Only string|int|float|dict supported")
 
