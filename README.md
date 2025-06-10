@@ -1,7 +1,7 @@
 # ODMantic Fernet Field Type
 
 [![Publish Python Package](https://github.com/arnabJ/ODMantic-Fernet-Field-Type/actions/workflows/publish.yml/badge.svg)](https://github.com/arnabJ/ODMantic-Fernet-Field-Type/actions/workflows/publish.yml)
-![python-3.8-3.9-3.10-3.11-3.12-3.13](https://img.shields.io/badge/python-3.8%20|%203.9%20|%203.10%20|%203.11%20|%203.12%20|%203.13-informational.svg)
+![python-3.9-3.10-3.11-3.12-3.13](https://img.shields.io/badge/python-3.9%20|%203.10%20|%203.11%20|%203.12%20|%203.13-informational.svg)
 [![Package version](https://img.shields.io/pypi/v/odmantic-fernet-field-type?color=%2334D058&label=pypi)](https://pypi.org/project/odmantic-fernet-field-type)
 [![PyPI Downloads](https://static.pepy.tech/badge/odmantic-fernet-field-type)](https://pepy.tech/projects/odmantic-fernet-field-type)
 
@@ -14,6 +14,7 @@ A field type that encrypts values using Fernet symmetric encryption.
 - `EncryptedString`: A custom field type that transparently encrypts data before storing it in MongoDB and decrypts it when retrieved
 - `EncryptedInt`: A custom field type to encrypt Integer values.
 - `EncryptedFloat`: A custom field type to encrypt Floats values.
+- `EncryptedDecimal`: A custom field type to encrypt decimal.Decimal values.
 - `EncryptedJSON`: A custom field type to encrypt JSONs.
 - Simple integration with ODMantic models
 - Compatible with FastAPI and starlette-admin
@@ -57,9 +58,11 @@ FERNET_KEY="pppppppqqqqqqqrrrrrrrrrr=,xxxxxxxyyyyyyyyzzzzzzzzzzz="
 ```
 
 ```python
+from decimal import Decimal
+
 from odmantic import Model
 # Note: The import package is "odmantic_fernet_field" and not "odmantic_fernet_field_type"
-from odmantic_fernet_field import EncryptedString, EncryptedInt, EncryptedFloat, EncryptedJSON
+from odmantic_fernet_field import EncryptedString, EncryptedInt, EncryptedFloat, EncryptedJSON, EncryptedDecimal
 
 class User(Model):
     name: str
@@ -70,13 +73,14 @@ class User(Model):
     account_no: EncryptedInt
     account_balance: EncryptedFloat
     bank_details: EncryptedJSON
+    amount: EncryptedDecimal
 
 ...
 
-# Create and save a user - the secret_answer, account_no, account_balance & bank_details will be encrypted in MongoDB
+# Create and save a user - the secret_answer, account_no, account_balance, bank_details & amount will be encrypted in MongoDB
 user = User(
     name="John", email="john@example.com", password_hash="...", secret_answer="April 1st, 2025", account_no=1234567890, 
-    account_balance=1000000.00, bank_details={
+    account_balance=1000000.00, amount=Decimal("100.00"), bank_details={
         "accountHolder": "John Doe",
         "accountNumber": 1234567890,
         "type": "Checking",
@@ -114,8 +118,8 @@ admin.mount_to(app)
 
 - Never hardcode encryption keys in your source code
 - Use environment variables
-- Rotate your encryption keys periodically [**NEW**]
-- Back up your encryption keys - if lost, encrypted data cannot be recovered
+- Rotate your encryption keys periodically
+- Back up your encryption keys—if lost, encrypted data cannot be recovered
 
 ## Compatibility
 
