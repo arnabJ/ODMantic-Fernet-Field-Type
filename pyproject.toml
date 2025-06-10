@@ -41,3 +41,8 @@ Documentation = "https://github.com/arnabJ/ODMantic-Fernet-Field-Type/blob/main/
 
 [project.scripts]
 fernet-key = "odmantic_fernet_field.utils:print_key_instructions"
+
+[dependency-groups]
+dev = [
+    "pytest==8.3.*",
+]
