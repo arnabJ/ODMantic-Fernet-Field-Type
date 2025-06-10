@@ -1,5 +1,17 @@
 # Changelog
+## 0.0.4 (2025-06-10)
 
+### Added
+- EncryptedDecimal Data type
+- Custom encoder and parser to BaseEncryptedJSON for successfully Encrypting/Decrypting datetime objects - [@withsmilo](https://github.com/withsmilo)
+
+### Fixed
+- EncryptedJSON fails when the dict has a datetime object in any field value. [Fix by [@withsmilo](https://github.com/withsmilo)]
+
+### Updated
+- README.md: Added example of the newly added field type
+- Fixed Docstring for EncryptedFloat field type
+---
 ## 0.0.3 (2025-03-28)
 
 ### Added
